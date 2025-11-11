@@ -3,7 +3,6 @@
    License: none (public domain)
 */
 
-
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -24,11 +23,19 @@ time, mark, audio, video {
     font: inherit;
     vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
     display: block;
 }
+
+/* --- AJUSTE DE TOPO --- */
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     line-height: 1;
     font-family: 'Space Grotesk', sans-serif;
@@ -38,6 +45,8 @@ body {
     background-position: center;
     background-size: cover;
 }
+
+/* --- RESET DE ELEMENTOS BÁSICOS --- */
 ol, ul {
     list-style: none;
 }
@@ -54,6 +63,7 @@ table {
     border-spacing: 0;
 }
 
+/* --- BANNER --- */
 .banner {
     width: auto;
     position: relative;
@@ -74,11 +84,13 @@ table {
     left: 80px;
 }
 
+/* --- CABEÇALHO --- */
 .cabecalho {
     align-items: center;
     display: flex;
     justify-content: space-between;
-    margin: 1.5rem 0 4rem 0;
+    margin: 0 0 4rem 0;
+    margin-left: 270px; /* mesma largura da sidebar */
 }
 
 .cabecalho__busca {
@@ -117,6 +129,7 @@ table {
     height: 2rem;
 }
 
+/* --- CARDS --- */
 .cards {
     width: 100%;
 }
@@ -128,24 +141,32 @@ table {
     margin-bottom: 1.5rem;
 }
 
-.cards__lista{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-content: space-between;
+.cards__lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    justify-items: center;
+    align-items: start;
 }
 
 .card {
     border-radius: 10px;
     box-shadow: 0px 10px 10px #00000050;
     color: #FFFFFF;
-    margin-bottom: 1.5rem;
     position: relative;
-    width: 450px;
+    width: 100%;
+    max-width: 350px;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.03);
 }
 
 .card__imagem {
-    width: 450px;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
     border-radius: 10px 10px 0 0;
 }
 
@@ -154,13 +175,11 @@ table {
     border-radius: 8px;
     border: 2px solid transparent;
     font-size: 1.2rem;
-    left: 310px;
-    margin-right: 1.5rem;
-    padding: .5rem .5rem;
+    right: 15px;
+    top: 15px;
     position: absolute;
+    padding: .5rem .8rem;
     text-align: center;
-    top: 20px;
-    width: 100px;
 }
 
 .card__info {
@@ -189,6 +208,7 @@ table {
     margin-top: 0.8em;
 }
 
+/* --- GALERIA --- */
 .galeria {
     display: flex;
     width: 100%;
@@ -244,15 +264,22 @@ table {
     font-size: 0.7rem;
 }
 
+/* --- MENU LATERAL FIXO À ESQUERDA --- */
 .menu-lateral {
-    padding-right: 1.5rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 270px;
+    padding: 2rem 1rem;
     box-sizing: border-box;
-    min-width: 270px;
+    background: linear-gradient(180deg, #07010e63, #000000);
 }
 
 .menu-lateral__navegacao {
     display: flex;
     flex-direction: column;
+    margin-top: 2rem;
 }
 
 .menu-lateral__navegacao a {
@@ -274,10 +301,17 @@ table {
     margin-right: 1.5rem;
 }
 
+/* --- ESTRUTURA GERAL --- */
 .pagina-inicial {
     max-width: 1440px;
-    padding: 1.5rem;
     margin: 0 auto;
+    padding: 1.5rem;
+}
+
+.principal {
+    margin-left: 270px; /* espaço para o menu fixo */
+    display: flex;
+    flex-direction: column;
 }
 
 .populares {
@@ -327,13 +361,8 @@ table {
     background: transparent;
 }
 
-.principal {
-    display: flex;
-    justify-content: space-between;
-}
-
 .rodape {
-    background-color: #5A189A;
+    background-color: #0000008c;
     width: 100%;
     padding: 1.5rem 3rem;
     box-sizing: border-box;
@@ -343,6 +372,7 @@ table {
 }
 
 .rodape__icones {
+    margin-left: 270px; /* mesma largura da sidebar */
     width: 80px;
     display: flex;
     justify-content: space-between;
@@ -381,4 +411,27 @@ table {
 .tags__tag:hover {
     border: 2px solid #7B78E5;
     cursor: pointer;
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 1200px) {
+    .cards__lista {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 800px) {
+    .menu-lateral {
+        position: relative;
+        height: auto;
+        width: 100%;
+    }
+
+    .principal {
+        margin-left: 0;
+    }
+
+    .cards__lista {
+        grid-template-columns: 1fr;
+    }
 }
