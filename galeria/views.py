@@ -1,8 +1,12 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Fotografia
+from django.contrib import messages
 # Create your views here.
 
 def index(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'É necessário estar autenticado para visitar a tela inicial.')
+        return redirect('login')
     fotografias = Fotografia.objects.filter(publicada=True).order_by('-data_fotografia')
     return render(request, 'galeria/index.html', {"fotografias": fotografias})
 
@@ -11,6 +15,9 @@ def imagem(request, fotografia_id):
     return render(request, 'galeria/imagem.html', {"fotografia": fotografia})
 
 def buscar(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'É necessário estar autenticado para realizar uma busca.')
+        return redirect('login')
     fotografias = Fotografia.objects.filter(publicada=True).order_by('-data_fotografia')
 
     nome_a_buscar = request.GET.get('buscar', '').strip()
