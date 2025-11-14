@@ -2,29 +2,35 @@
 <div class="pagina-inicial">
         <header class="cabecalho">
             <img src="{% static 'assets/logo/Logo(5).png' %}" alt="Logo da Amora Space" />
-            {% for message in messages %}
-            <div class="alert alert-primary">
-                <p id ="messages">{{message}}</p>
-            </div>
-            {% endfor %}
+            {% if request.user.is_authenticated %}
             <div class="cabecalho__busca">
-                <div class="busca__fundo">
-                    <form action="{% url 'buscar' %}"> 
-                        <input class="busca__input" type="text" name="buscar" placeholder="O que você procura?">
-                        <button type = "submit"> 
-                            <img class="busca__icone" src="{% static 'assets/ícones/1x/search.png' %}" alt="ícone de search">
-                        </button>
-                    </form>
-                    
-                </div>
+                <form action="{% url 'buscar' %}" class="busca__fundo">
+                    <input class="busca__input" type="text" name="buscar" placeholder="O que você procura?">
+
+                    <button type="submit" class="busca__botao">
+                        <img class="busca__icone" src="{% static '/assets/ícones/1x/search.png' %}" alt="buscar">
+                    </button>
+                </form>
             </div>
+            {% endif %}
         </header>
         <main class="principal">
             <section class="menu-lateral">
+                {% if request.user.is_authenticated %}
+                    <div class="menu-user">
+                        Seja bem vindo (a), {{ request.user.username|capfirst }} 💜
+                    </div>
+                {% endif %}
+
+
                 <nav class="menu-lateral__navegacao">
                     <a href="{% url 'index'%}"><img src="{% static 'assets/ícones/1x/Home - ativo.png' %}" alt="ícone home"> Home</a>
+                    {% if not request.user.is_authenticated %}
                     <a href=" {% url 'login' %}"><img src="{% static 'assets/ícones/1x/Mais vistas - inativo(1).png' %}" alt="ícone mais vistas">Login</a>
                     <a href="{% url 'cadastro' %}"><img src="{% static 'assets/ícones/1x/Novas - inativo(1).png' %}" alt="ícone novas"> Cadastro</a>
+                    {% endif %}
+                    {% if request.user.is_authenticated %}
                     <a href="{% url 'logout'%}"><img src="{% static 'assets/ícones/1x/Surpreenda-me - inativo(1).png' %}" alt="ícone surpreenda-me"> Logout</a>
+                    {% endif %}
                 </nav>
             </section>

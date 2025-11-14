@@ -5,9 +5,9 @@ from django.contrib import messages
 
 def index(request):
     if not request.user.is_authenticated:
-        messages.error(request, 'É necessário estar autenticado para visitar a tela inicial.')
+        messages.error(request, 'É necessário estar autenticado para visitar a tela inicial.') # usuario=request.user  # para cada usuário ver apenas suas fotos
         return redirect('login')
-    fotografias = Fotografia.objects.filter(publicada=True).order_by('-data_fotografia')
+    fotografias = Fotografia.objects.filter(publicada=True).order_by('-data_fotografia') 
     return render(request, 'galeria/index.html', {"fotografias": fotografias})
 
 def imagem(request, fotografia_id):

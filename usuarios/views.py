@@ -7,6 +7,8 @@ from django.contrib import messages
 # Create your views here.
 def login(request):
     form = LoginForms()
+    if request.user.is_authenticated:
+        return redirect('index')
 
     if request.method == 'POST':
         form = LoginForms(request.POST)
@@ -17,17 +19,19 @@ def login(request):
 
         user = auth.authenticate(request, username=usuario, password=senha) # autentica o usuario
         if user is not None: # se o usuario for valido
-            messages.success(request, 'Login realizado com sucesso!')
             auth.login(request, user)
             return redirect('index')
         else: # se o usuario for invalido
-            messages.error(request, 'Erro ao efetuar login')
+            messages.error(request, 'Usuário ou senha inválidos.')
             return redirect('login')
 
     return render(request, 'usuarios/login.html', {'form' : form})
 
 def cadastro(request):    
     form = CadastroForms()
+
+    if request.user.is_authenticated:
+        return redirect('index')
 
     if request.method == 'POST':
         form = CadastroForms(request.POST)
@@ -39,6 +43,10 @@ def cadastro(request):
 
             if User.objects.filter(username=usuario).exists(): # verifica se o usuario ja existe
                 messages.error(request, 'Usuario ja cadastrado.')
+                return redirect('cadastro')
+            
+            if User.objects.filter(email=email).exists(): # verifica se o usuario ja existe
+                messages.error(request, 'Esse e-mail já está em uso.')
                 return redirect('cadastro')
             
             cadastro = User.objects.create_user(
