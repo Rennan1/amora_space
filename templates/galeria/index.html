@@ -1,4 +1,4 @@
-{% extends 'galeria/base.html' %}
+{% extends 'shared/base.html' %}
 {% load static %}
 {% block content %}
     
@@ -10,10 +10,10 @@
                 <section class="tags">
                     <p class="tags__titulo">Busque por tags:</p>
                     <ul class="tags__lista">
-                        <li class="tags__tag">Diária</li>
-                        <li class="tags__tag">Passeio</li>
-                        <li class="tags__tag">Casa</li>
-                        <li class="tags__tag">Outros</li>
+                        <li class="tags__tag"><a href="{% url 'filtro' 'DIÁRIA' %}" class="btn" style="color: #C9C9C9;">Diária</a></li>
+                        <li class="tags__tag"><a href="{% url 'filtro' 'PASSEIO' %}" class="btn" style="color: #C9C9C9;">Passeio</a></li>
+                        <li class="tags__tag"><a href="{% url 'filtro' 'CASA' %}" class="btn" style="color: #C9C9C9;">Casa</a></li>
+                        <li class="tags__tag"><a href="{% url 'filtro' 'OUTROS' %}" class="btn" style="color: #C9C9C9;">Outros</a></li>
                     </ul>
                 </section>
                 <section class="galeria">
@@ -30,7 +30,7 @@
                                     <img class="card__imagem" src="{% static 'assets/imagens/galeria/not-found.png'%}" alt="foto">
                                     {%endif %}
                                 </a>
-                                <span class="card__tag">Estrelas</span>
+                                <span class="card__tag">{{fotografia.categoria|lower|capfirst}}</span>
                                 <div class="card__info">
                                     <p class="card__titulo"> {{fotografia.nome}}</p>
                                     <div class="card__texto">
