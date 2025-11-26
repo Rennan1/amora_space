@@ -41,8 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.galeria',
-    'apps.usuarios'
+    'apps.galeria', # App criada para gerenciar as fotografias
+    'apps.usuarios', # App criada para gerenciar os usuários
+    'storages', # Biblioteca para integração com AWS S3
 ]
 
 MIDDLEWARE = [
@@ -117,23 +118,51 @@ USE_I18N = True
 USE_TZ = True
 
 
+# AWS Configuração
+# Informações no .env
+AWS_ACCESS_KEY_ID = str(os.getenv('AWS_ACCESS_KEY_ID'))
+AWS_SECRET_ACCESS_KEY = str(os.getenv('AWS_SECRET_ACCESS_KEY'))
+AWS_STORAGE_BUCKET_NAME = str(os.getenv('AWS_STORAGE_BUCKET_NAME'))
+AWS_S3_REGION_NAME = 'us-east-1'  # 👈 Altere para a região correta do seu bucket (ex: 'sa-east-1' para São Paulo)
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+
+# Configurações de permissão e cache
+AWS_DEFAULT_ACL = 'public-read'
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_FILE_OVERWRITE = False
+
+# Compatibilidade com Django 5.2 - desabilita checagem antiga
+STATICFILES_STORAGE = None
+DEFAULT_FILE_STORAGE = None
+# ✅ CONFIGURAÇÃO CORRETA DE STORAGE PARA DJANGO 5.2
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "location": "media",
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "location": "static",
+        },
+    },
+}
+
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-STATIC_URL = 'static/'
-
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 STATICFILES_DIRS = [
-    os.path.join (BASE_DIR, 'setup/static')
+    os.path.join(BASE_DIR, 'setup/static')
 ]
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# Media
-
-MEDIA_URL = '/media/'
-
+# Media files (uploads de usuários)
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 
 
 # Default primary key field type
@@ -141,8 +170,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# messages
 
+# Messages configuration
 from django.contrib.messages import constants as messages
 
 MESSAGE_TAGS = {
