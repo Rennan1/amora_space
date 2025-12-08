@@ -30,8 +30,10 @@
                     <a href=" {% url 'login' %}"><img src="{% static 'assets/ícones/1x/Mais vistas - inativo(1).png' %}" alt="ícone mais vistas">Login</a>
                     <a href="{% url 'cadastro' %}"><img src="{% static 'assets/ícones/1x/Novas - inativo(1).png' %}" alt="ícone novas"> Cadastro</a>
                     {% endif %}
-                    {% if request.user.is_authenticated %}
+                    {% if request.user.is_superuser %}
                     <a href="{% url 'nova_imagem'%}"><img src="{% static 'assets/ícones/1x/new-1.png' %}" alt="ícone surpreenda-me"> Nova Imagem</a>
+                    {% endif %}
+                    {% if request.user.is_authenticated %}
                     <a href="{% url 'logout'%}"><img src="{% static 'assets/ícones/1x/Surpreenda-me - inativo(1).png' %}" alt="ícone surpreenda-me"> Logout</a>
                     {% endif %}
                 </nav>

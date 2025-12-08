@@ -32,9 +32,10 @@ def buscar(request):
     return render(request, 'galeria/index.html', {"fotografias": fotografias})
 
 def nova_imagem(request):
-    if not request.user.is_authenticated:
-        messages.error(request, 'É necessário estar autenticado para adicionar uma imagem.') 
-        return redirect('login')
+      # Apenas superusuário pode acessar
+    if not request.user.is_superuser:
+        messages.error(request, 'Apenas pessoas autorizadas podem adicionar novas imagens.')
+        return redirect('index')
     
     form = FotografiaForms
 
