@@ -9,6 +9,7 @@ class Fotografia(models.Model):
         ('DIÁRIA', "Diária"),
         ('PASSEIO', "Passeio"),
         ('CASA', "Casa"),
+        ('NATAL', "Natal"),
         ('OUTROS', "Outros")
 
     ]
